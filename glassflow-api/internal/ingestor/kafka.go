@@ -81,9 +81,11 @@ func (k *KafkaMsgProcessor) convertKafkaToNATSHeaders(headers []sarama.RecordHea
 	natsHeaders := make(nats.Header)
 
 	for _, header := range headers {
-		if header.Value != nil && len(header.Value) == 0 {
-			natsHeaders.Add(string(header.Key), string(header.Value))
+		if header.Value == nil {
+			continue
 		}
+
+		natsHeaders.Add(string(header.Key), string(header.Value))
 	}
 
 	return natsHeaders
